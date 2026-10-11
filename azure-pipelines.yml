@@ -1,0 +1,42 @@
+trigger:
+  - main
+
+pr:
+  - main
+
+pool:
+  vmImage: "ubuntu-latest"
+
+variables:
+  NODE_VERSION: "20.x"
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "$(NODE_VERSION)"
+    displayName: "Use Node.js"
+
+  - script: npm ci
+    displayName: "Install dependencies"
+
+  - script: npx playwright install --with-deps chromium
+    displayName: "Install Playwright browser"
+
+  - script: npm run test:ci:regression
+    displayName: "Run regression test pack"
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: "JUnit"
+      testResultsFiles: "results.xml"
+      failTaskOnFailedTests: true
+    condition: succeededOrFailed()
+    displayName: "Publish JUnit test results"
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: "allure-results"
+      artifactName: "allure-results"
+      publishLocation: "Container"
+    condition: succeededOrFailed()
+    displayName: "Publish Allure raw results"

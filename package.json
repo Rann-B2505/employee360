@@ -1,0 +1,35 @@
+{
+  "name": "employee-360-integration-tests",
+  "version": "1.0.0",
+  "description": "Playwright API tests for Employee 360 integration flow",
+  "main": "index.js",
+  "scripts": {
+    "service:start": "ts-node src/service/server.ts",
+    "test": "playwright test --reporter=line,allure-playwright",
+    "test:regression": "playwright test --grep @regression --reporter=line,allure-playwright",
+    "test:extended": "playwright test --grep @extended --reporter=line,allure-playwright",
+    "test:allure:results": "allure serve ./allure-results",
+    "test:ci": "playwright test --reporter=line,allure-playwright,junit",
+    "test:ci:regression": "playwright test --grep @regression --reporter=line,allure-playwright,junit",
+    "db:reset": "node scripts/reset-db.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.5",
+    "allure-commandline": "^2.46.1",
+    "allure-playwright": "^3.13.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.7",
+    "express": "^5.3.0",
+    "sqlite3": "^6.0.1"
+  }
+}
